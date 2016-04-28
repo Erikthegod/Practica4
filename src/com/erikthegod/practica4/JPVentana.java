@@ -47,6 +47,10 @@ public class JPVentana extends javax.swing.JPanel {
         jbAniadir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtProductos = new javax.swing.JTable();
+        jtbMenu = new javax.swing.JToolBar();
+        jbNuevo = new javax.swing.JButton();
+        jbGuardar = new javax.swing.JButton();
+        jbGenerar = new javax.swing.JButton();
 
         jlCategoria.setText("Categoria");
 
@@ -78,6 +82,26 @@ public class JPVentana extends javax.swing.JPanel {
         ));
         jScrollPane1.setViewportView(jtProductos);
 
+        jtbMenu.setRollover(true);
+
+        jbNuevo.setText("nuevo");
+        jbNuevo.setFocusable(false);
+        jbNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jtbMenu.add(jbNuevo);
+
+        jbGuardar.setText("guardar");
+        jbGuardar.setFocusable(false);
+        jbGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jtbMenu.add(jbGuardar);
+
+        jbGenerar.setText("generar");
+        jbGenerar.setFocusable(false);
+        jbGenerar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbGenerar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jtbMenu.add(jbGenerar);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -97,11 +121,15 @@ public class JPVentana extends javax.swing.JPanel {
                         .addGap(35, 35, 35)
                         .addComponent(jbAniadir, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(22, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jtbMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(100, 100, 100)
+                .addComponent(jtbMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlCategoria)
                     .addComponent(jcbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -140,10 +168,14 @@ public class JPVentana extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbAniadir;
+    private javax.swing.JButton jbGenerar;
+    private javax.swing.JButton jbGuardar;
+    private javax.swing.JButton jbNuevo;
     private javax.swing.JComboBox<String> jcbCategoria;
     private javax.swing.JComboBox<String> jcbProducto;
     private javax.swing.JLabel jlCategoria;
     private javax.swing.JLabel jlProducto;
     private javax.swing.JTable jtProductos;
+    private javax.swing.JToolBar jtbMenu;
     // End of variables declaration//GEN-END:variables
 }
