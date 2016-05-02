@@ -5,12 +5,22 @@
  */
 package com.erikthegod.practica4;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import com.itextpdf.text.pdf.PdfPTable;
 
 /**
  *
@@ -18,77 +28,44 @@ import java.util.ArrayList;
  */
 public class GestorBBDD {
 
-    ArrayList<Categoria> categorias = new ArrayList();
-    Categoria cat;
-    ArrayList<Producto> productos = new ArrayList();
-    Producto pro;
+    Connection c = null;//Conexión
+    Statement stmt = null;//Sentencia
+    String sql = null;//Cadena con la sentencia sql
+    ResultSet rs = null;//Conjunto de resultados
 
-    public void recogerCategorias() {
+    public void conectar() {
         try {
-            Connection c = null;//Conexión
-            Statement stmt = null;//Sentencia
-            String sql = null;//Cadena con la sentencia sql
-            ResultSet rs = null;//Conjunto de resultados
             Class.forName("org.sqlite.JDBC");//Carga del driver
-            c = DriverManager.getConnection("jdbc:sqlite:C:/practica4/practica4.db");
+            c = DriverManager.getConnection("jdbc:sqlite:E:/Grado/Programacion/Proyectos/Practica4/pedidos.db");
             stmt = c.createStatement();
-            sql = "SELECT * from categoria";
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(GestorBBDD.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestorBBDD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public int comprobacionID() {
+        int id = 0;
+        try {
+            conectar();
+            sql = "Select count(*) from pedidos;";
             rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                cat = new Categoria(rs.getString("nombre"));
-                categorias.add(cat);
+            if (rs.getInt("count(*)") == 0) {
+                sql = "insert into pedidos values (0);";
+                stmt.executeUpdate(sql);
+            } else {
+                sql = "Select id_pedidos from pedidos where id_pedidos = (select max(id_pedidos) from pedidos);";
+                rs = stmt.executeQuery(sql);
+                id = rs.getInt("id_pedidos") + 1;
+                sql = "insert into pedidos values (" + id + ");";
+                stmt.executeUpdate(sql);
             }
             c.close();
         } catch (SQLException ex) {
             System.err.println("ERROR DE SQL EXCEPTION");
-        } catch (ClassNotFoundException ex) {
-            System.err.println("ERROR DE CLASS NOT FOUND");
         }
+        return id;
     }
 
-    public void recogerProductos(String categoria) {
-        try {
-            Connection c = null;//Conexión
-            Statement stmt = null;//Sentencia
-            String sql = null;//Cadena con la sentencia sql
-            ResultSet rs = null;//Conjunto de resultados
-            Class.forName("org.sqlite.JDBC");//Carga del driver
-            c = DriverManager.getConnection("jdbc:sqlite:C:/practica4/practica4.db");
-            stmt = c.createStatement();
-            sql = "SELECT * from producto where nombre_cat='" + categoria + "'";
-            rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                pro = new Producto(rs.getString("producto"), rs.getInt("precio"),rs.getString("nombre_cat"));
-                productos.add(pro);
-            }
-            c.close();
-        } catch (SQLException ex) {
-            System.err.println("ERROR DE SQL EXCEPTION");
-        } catch (ClassNotFoundException ex) {
-            System.err.println("ERROR DE CLASS NOT FOUND");
-        }
-    }
-
-    public Producto recogerPrecio(String producto) {
-        try {
-            Connection c = null;//Conexión
-            Statement stmt = null;//Sentencia
-            String sql = null;//Cadena con la sentencia sql
-            ResultSet rs = null;//Conjunto de resultados
-            Class.forName("org.sqlite.JDBC");//Carga del driver
-            c = DriverManager.getConnection("jdbc:sqlite:C:/practica4/practica4.db");
-            stmt = c.createStatement();
-            sql = "SELECT * from producto where nombre_cat='" + producto + "'";
-            rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                pro = new Producto( rs.getString("producto"), rs.getInt("precio"),rs.getString("nombre_cat"));
-            }
-            c.close();
-        } catch (SQLException ex) {
-            System.err.println("ERROR DE SQL EXCEPTION");
-        } catch (ClassNotFoundException ex) {
-            System.err.println("ERROR DE CLASS NOT FOUND");
-        }
-        return pro;
-    }
 }
