@@ -16,10 +16,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,6 +33,7 @@ public class Cesta {
     Producto pro;
     ArrayList<Integer> idPedido = new ArrayList();
     GestorBBDD gest = new GestorBBDD();
+    PrintWriter fichero;
 
     public void llenarCesta(int id, String producto) {
         try {
@@ -101,6 +104,38 @@ public class Cesta {
             } catch (IOException ex) {
                 Logger.getLogger(GestorBBDD.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+
+    public void exportarHtml() {
+        try {
+            fichero = new PrintWriter("Pedidos.html");
+            fichero.println("<!DOCTYPE html>");
+            fichero.println("<html>");
+            fichero.println("<head>");
+            fichero.println("<title> ErikTheGod </title>");
+            fichero.println("</head>");
+            fichero.println("<body bgcolor=\"blue\" text=\"white\">");
+            fichero.println("<table border=\"5\" rules=\"all\">");
+            fichero.println("<tr>");
+            fichero.println("<td> Nombre </td>");;
+            fichero.println("<td> Categoria </td>");
+            fichero.println("<td> Precio </td>");
+            fichero.println("<td> Id Pedido </td>");
+            fichero.println("</tr>");
+            for (int i = 0; i < productos.size(); i++) {
+                fichero.println("<tr>");
+                fichero.println("<td>" + productos.get(i).getNombre() + "</td>");;
+                fichero.println("<td>" + productos.get(i).getCategoria() + "</td>");
+                fichero.println("<td>" + productos.get(i).getPrecio() + "</td>");
+                fichero.println("<td>" + idPedido.get(i) + "</td>");
+                fichero.println("</tr>");
+            }
+
+            fichero.close();
+            JOptionPane.showMessageDialog(null, "El juego ha sido exportado correctamente");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Cesta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -119,6 +119,11 @@ public class JPVentana extends javax.swing.JPanel {
         jbGenerar.setFocusable(false);
         jbGenerar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbGenerar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jbGenerar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbGenerarActionPerformed(evt);
+            }
+        });
         jtbMenu.add(jbGenerar);
 
         jbPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/erikthegod/recursos/documentacion-pdf_318-33165.png"))); // NOI18N
@@ -241,6 +246,12 @@ public class JPVentana extends javax.swing.JPanel {
         cest.recuperarPedidos();
         cest.generarPDF();
     }//GEN-LAST:event_jbPDFActionPerformed
+
+    private void jbGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGenerarActionPerformed
+        // TODO add your handling code here:
+        cest.recuperarPedidos();
+        cest.exportarHtml();
+    }//GEN-LAST:event_jbGenerarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
