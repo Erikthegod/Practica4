@@ -14,12 +14,12 @@ import java.util.ArrayList;
  */
 public class Producto {
 
-    String nombre;
-    Integer precio;
-    String categoria;
+    private String nombre;
+    private int precio;
+    private String categoria;
     GestorBBDD gest = new GestorBBDD();
-    Producto pro;
-    ArrayList<Producto> productos = new ArrayList();
+    static Producto pro;
+    static ArrayList<Producto> productos = new ArrayList();
 
     public Producto(String nombre, Integer precio, String categoria) {
         this.nombre = nombre;

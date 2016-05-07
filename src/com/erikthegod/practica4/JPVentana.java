@@ -36,11 +36,12 @@ public class JPVentana extends javax.swing.JPanel {
         vNombres.add("Precio");
         dtm = new DefaultTableModel(vNombres, 0);
         jtProductos.setModel(dtm);
-        jbAniadir.disable();
-        jbGenerar.disable();
-        jbGuardar.disable();
-        jcbCategoria.disable();
-        jcbProducto.disable();
+        jbAniadir.setEnabled(false);
+        jbGenerar.setEnabled(false);
+        jbGuardar.setEnabled(false);
+        jcbCategoria.setEnabled(false);
+        jcbProducto.setEnabled(false);
+        jbPDF.setEnabled(false);
 
     }
 
@@ -179,10 +180,10 @@ public class JPVentana extends javax.swing.JPanel {
 
     private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed
         jcbProducto.removeAllItems();
-        pro.productos.clear();
+        Producto.productos.clear();
         pro.recogerProductos((String) jcbCategoria.getSelectedItem());
-        for (int i = 0; i < pro.productos.size(); i++) {
-            jcbProducto.addItem(pro.productos.get(i).getNombre());
+        for (int i = 0; i < Producto.productos.size(); i++) {
+            jcbProducto.addItem(Producto.productos.get(i).getNombre());
         }
     }//GEN-LAST:event_jcbCategoriaActionPerformed
 
@@ -190,12 +191,12 @@ public class JPVentana extends javax.swing.JPanel {
         dtm = new DefaultTableModel(vNombres, 0);
         jtProductos.setModel(dtm);
         producto = (String) jcbProducto.getSelectedItem();
-        cest.productos.add(pro.recogerPrecio(producto));
-        for (int i = 0; i < cest.productos.size(); i++) {
+        cest.productosRecogidos.add(pro.recogerPrecio(producto));
+        for (int i = 0; i < cest.productosRecogidos.size(); i++) {
             dtm.setRowCount(dtm.getRowCount() + 1);
-            jtProductos.setValueAt(cest.productos.get(i).getCategoria(), i, 0);
-            jtProductos.setValueAt(cest.productos.get(i).getNombre(), i, 1);
-            jtProductos.setValueAt(cest.productos.get(i).getPrecio(), i, 2);
+            jtProductos.setValueAt(cest.productosRecogidos.get(i).getCategoria(), i, 0);
+            jtProductos.setValueAt(cest.productosRecogidos.get(i).getNombre(), i, 1);
+            jtProductos.setValueAt(cest.productosRecogidos.get(i).getPrecio(), i, 2);
         }
     }//GEN-LAST:event_jbAniadirActionPerformed
 
@@ -204,22 +205,23 @@ public class JPVentana extends javax.swing.JPanel {
 
         int resp = JOptionPane.showConfirmDialog(null, "Desea crear un pedido nuevo,se borrara todo lo que no haya sido guardado", "Precaucion", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_OPTION);
         if (JOptionPane.YES_OPTION == resp) {
-            jbAniadir.enable();
-            jbGenerar.enable();
-            jbGuardar.enable();
-            jcbCategoria.enable();
-            jcbProducto.enable();
-            cat.categorias.clear();
+            jbAniadir.setEnabled(true);
+            jbGenerar.setEnabled(true);
+            jbGuardar.setEnabled(true);
+            jcbCategoria.setEnabled(true);
+            jcbProducto.setEnabled(true);
+            jbPDF.setEnabled(true);
+            Categoria.categorias.clear();
             jcbCategoria.removeAll();
             jcbProducto.removeAll();
-            cest.productos.clear();
+            cest.productosRecogidos.clear();
             for (int i = 0; i < jtProductos.getRowCount(); i++) {
                 dtm.removeRow(i);
                 i -= 1;
             }
             cat.recogerCategorias();
-            for (int i = 0; i < cat.categorias.size(); i++) {
-                jcbCategoria.addItem(cat.categorias.get(i).getNombre());
+            for (int i = 0; i < Categoria.categorias.size(); i++) {
+                jcbCategoria.addItem(Categoria.categorias.get(i).getNombre());
             }
 
         }
@@ -230,14 +232,14 @@ public class JPVentana extends javax.swing.JPanel {
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
         // TODO add your handling code here:
         id = gest.comprobacionID();
-        for (int i = 0; i < cest.productos.size(); i++) {
-            cest.llenarCesta(id, cest.productos.get(i).getNombre());
+        for (int i = 0; i < cest.productosRecogidos.size(); i++) {
+            cest.llenarCesta(id, cest.productosRecogidos.get(i).getNombre());
         }
         for (int i = 0; i < jtProductos.getRowCount(); i++) {
             dtm.removeRow(i);
             i -= 1;
         }
-        cest.productos.clear();
+        cest.productosRecogidos.clear();
 
     }//GEN-LAST:event_jbGuardarActionPerformed
 

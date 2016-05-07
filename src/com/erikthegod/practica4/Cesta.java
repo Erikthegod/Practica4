@@ -29,7 +29,7 @@ import javax.swing.JOptionPane;
  */
 public class Cesta {
 
-    ArrayList<Producto> productos = new ArrayList();
+    ArrayList<Producto> productosRecogidos = new ArrayList();
     Producto pro;
     ArrayList<Integer> idPedido = new ArrayList();
     GestorBBDD gest = new GestorBBDD();
@@ -49,14 +49,14 @@ public class Cesta {
     public void recuperarPedidos() {
         try {
             gest.conectar();
-            productos.clear();
+            productosRecogidos.clear();
             gest.sql = "Select nombrePro , precio , nombre_cat , id_pedido\n"
                     + "from pedido_producto , producto\n"
                     + "where  nombrePro = producto_pedidos;";
             gest.rs = gest.stmt.executeQuery(gest.sql);
             while (gest.rs.next()) {
                 pro = new Producto(gest.rs.getString("nombrePro"), gest.rs.getInt("precio"), gest.rs.getString("nombre_cat"));
-                productos.add(pro);
+                productosRecogidos.add(pro);
                 idPedido.add(gest.rs.getInt("id_pedido"));
             }
             gest.c.close();
@@ -83,23 +83,21 @@ public class Cesta {
             tabla.addCell("Producto");
             tabla.addCell("Precio");
             tabla.addCell("Id Pedido");
-            for (int i = 0; i < productos.size(); i++) {
-                tabla.addCell(productos.get(i).getCategoria());
-                tabla.addCell(productos.get(i).getNombre());
-                tabla.addCell(productos.get(i).getPrecio().toString());
+            for (int i = 0; i < productosRecogidos.size(); i++) {
+                tabla.addCell(productosRecogidos.get(i).getCategoria());
+                tabla.addCell(productosRecogidos.get(i).getNombre());
+                tabla.addCell(productosRecogidos.get(i).getPrecio().toString());
                 tabla.addCell(idPedido.get(i).toString());
             }
             documento.add(tabla);
             documento.close();
 
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GestorBBDD.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DocumentException ex) {
+        } catch (FileNotFoundException | DocumentException ex) {
             Logger.getLogger(GestorBBDD.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 archivo.close();
-                productos.clear();
+                productosRecogidos.clear();
                 idPedido.clear();
             } catch (IOException ex) {
                 Logger.getLogger(GestorBBDD.class.getName()).log(Level.SEVERE, null, ex);
@@ -118,16 +116,16 @@ public class Cesta {
             fichero.println("<body bgcolor=\"blue\" text=\"white\">");
             fichero.println("<table border=\"5\" rules=\"all\">");
             fichero.println("<tr>");
-            fichero.println("<td> Nombre </td>");;
+            fichero.println("<td> Nombre </td>");
             fichero.println("<td> Categoria </td>");
             fichero.println("<td> Precio </td>");
             fichero.println("<td> Id Pedido </td>");
             fichero.println("</tr>");
-            for (int i = 0; i < productos.size(); i++) {
+            for (int i = 0; i < productosRecogidos.size(); i++) {
                 fichero.println("<tr>");
-                fichero.println("<td>" + productos.get(i).getNombre() + "</td>");;
-                fichero.println("<td>" + productos.get(i).getCategoria() + "</td>");
-                fichero.println("<td>" + productos.get(i).getPrecio() + "</td>");
+                fichero.println("<td>" + productosRecogidos.get(i).getNombre() + "</td>");
+                fichero.println("<td>" + productosRecogidos.get(i).getCategoria() + "</td>");
+                fichero.println("<td>" + productosRecogidos.get(i).getPrecio() + "</td>");
                 fichero.println("<td>" + idPedido.get(i) + "</td>");
                 fichero.println("</tr>");
             }

@@ -16,8 +16,8 @@ public class Categoria {
 
     private String nombre;
     GestorBBDD gest = new GestorBBDD();
-    Categoria cat;
-    ArrayList<Categoria> categorias = new ArrayList();
+    static Categoria cat;
+    static ArrayList<Categoria> categorias = new ArrayList();
 
     Categoria(String nombreCategoria) {
         nombre = nombreCategoria;
