@@ -3,8 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.erikthegod.practica4;
+package com.erikthegod.practica4.gui;
 
+import com.erikthegod.practica4.modelo.Categoria;
+import com.erikthegod.practica4.modelo.Cesta;
+import com.erikthegod.practica4.persistencia.GestorBBDD;
+import com.erikthegod.practica4.modelo.Producto;
+import com.itextpdf.text.DocumentException;
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -94,7 +101,7 @@ public class JPVentana extends javax.swing.JPanel {
 
         jtbMenu.setRollover(true);
 
-        jbNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/erikthegod/recursos/guardar.png"))); // NOI18N
+        jbNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/erikthegod/practica4/recursos/guardar.png"))); // NOI18N
         jbNuevo.setFocusable(false);
         jbNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -105,7 +112,7 @@ public class JPVentana extends javax.swing.JPanel {
         });
         jtbMenu.add(jbNuevo);
 
-        jbGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/erikthegod/recursos/guardar1.png"))); // NOI18N
+        jbGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/erikthegod/practica4/recursos/guardar1.png"))); // NOI18N
         jbGuardar.setFocusable(false);
         jbGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -116,7 +123,7 @@ public class JPVentana extends javax.swing.JPanel {
         });
         jtbMenu.add(jbGuardar);
 
-        jbGenerar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/erikthegod/recursos/settings.png"))); // NOI18N
+        jbGenerar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/erikthegod/practica4/recursos/settings.png"))); // NOI18N
         jbGenerar.setFocusable(false);
         jbGenerar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbGenerar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -127,7 +134,7 @@ public class JPVentana extends javax.swing.JPanel {
         });
         jtbMenu.add(jbGenerar);
 
-        jbPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/erikthegod/recursos/documentacion-pdf_318-33165.png"))); // NOI18N
+        jbPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/erikthegod/practica4/recursos/documentacion-pdf_318-33165.png"))); // NOI18N
         jbPDF.setFocusable(false);
         jbPDF.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jbPDF.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -144,22 +151,23 @@ public class JPVentana extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jlCategoria)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jcbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jlProducto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(jbAniadir, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(83, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jtbMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jlCategoria)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jcbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlProducto)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcbProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jbAniadir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,49 +187,66 @@ public class JPVentana extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed
-        jcbProducto.removeAllItems();
-        Producto.productos.clear();
-        pro.recogerProductos((String) jcbCategoria.getSelectedItem());
-        for (int i = 0; i < Producto.productos.size(); i++) {
-            jcbProducto.addItem(Producto.productos.get(i).getNombre());
+        try {
+            jcbProducto.removeAllItems();
+            Producto.productos.clear();
+            pro.recogerProductos((String) jcbCategoria.getSelectedItem());
+            for (int i = 0; i < Producto.productos.size(); i++) {
+                jcbProducto.addItem(Producto.productos.get(i).getNombre());
+            }
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jcbCategoriaActionPerformed
 
     private void jbAniadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAniadirActionPerformed
-        dtm = new DefaultTableModel(vNombres, 0);
-        jtProductos.setModel(dtm);
-        producto = (String) jcbProducto.getSelectedItem();
-        cest.productosRecogidos.add(pro.recogerPrecio(producto));
-        for (int i = 0; i < cest.productosRecogidos.size(); i++) {
-            dtm.setRowCount(dtm.getRowCount() + 1);
-            jtProductos.setValueAt(cest.productosRecogidos.get(i).getCategoria(), i, 0);
-            jtProductos.setValueAt(cest.productosRecogidos.get(i).getNombre(), i, 1);
-            jtProductos.setValueAt(cest.productosRecogidos.get(i).getPrecio(), i, 2);
+        try {
+            dtm = new DefaultTableModel(vNombres, 0);
+            jtProductos.setModel(dtm);
+            producto = (String) jcbProducto.getSelectedItem();
+            cest.getProductosRecogidos().add(pro.recogerPrecio(producto));
+            for (int i = 0; i < cest.getProductosRecogidos().size(); i++) {
+                dtm.setRowCount(dtm.getRowCount() + 1);
+                jtProductos.setValueAt(cest.getProductosRecogidos().get(i).getCategoria(), i, 0);
+                jtProductos.setValueAt(cest.getProductosRecogidos().get(i).getNombre(), i, 1);
+                jtProductos.setValueAt(cest.getProductosRecogidos().get(i).getPrecio(), i, 2);
+            }
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbAniadirActionPerformed
 
     private void jbNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoActionPerformed
-        // TODO add your handling code here:
 
         int resp = JOptionPane.showConfirmDialog(null, "Desea crear un pedido nuevo,se borrara todo lo que no haya sido guardado", "Precaucion", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_OPTION);
         if (JOptionPane.YES_OPTION == resp) {
-            jbAniadir.setEnabled(true);
-            jbGenerar.setEnabled(true);
-            jbGuardar.setEnabled(true);
-            jcbCategoria.setEnabled(true);
-            jcbProducto.setEnabled(true);
-            jbPDF.setEnabled(true);
-            Categoria.categorias.clear();
-            jcbCategoria.removeAll();
-            jcbProducto.removeAll();
-            cest.productosRecogidos.clear();
-            for (int i = 0; i < jtProductos.getRowCount(); i++) {
-                dtm.removeRow(i);
-                i -= 1;
-            }
-            cat.recogerCategorias();
-            for (int i = 0; i < Categoria.categorias.size(); i++) {
-                jcbCategoria.addItem(Categoria.categorias.get(i).getNombre());
+            try {
+                jbAniadir.setEnabled(true);
+                jbGenerar.setEnabled(true);
+                jbGuardar.setEnabled(true);
+                jcbCategoria.setEnabled(true);
+                jcbProducto.setEnabled(true);
+                jbPDF.setEnabled(true);
+                Categoria.categorias.clear();
+                jcbCategoria.removeAllItems();
+                jcbProducto.removeAllItems();
+                cest.getProductosRecogidos().clear();
+                for (int i = 0; i < jtProductos.getRowCount(); i++) {
+                    dtm.removeRow(i);
+                    i -= 1;
+                }
+                cat.recogerCategorias();
+                for (int i = 0; i < Categoria.categorias.size(); i++) {
+                    jcbCategoria.addItem(Categoria.categorias.get(i).getNombre());
+                }
+            } catch (ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
             }
 
         }
@@ -230,29 +255,51 @@ public class JPVentana extends javax.swing.JPanel {
     }//GEN-LAST:event_jbNuevoActionPerformed
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
-        // TODO add your handling code here:
-        id = gest.comprobacionID();
-        for (int i = 0; i < cest.productosRecogidos.size(); i++) {
-            cest.llenarCesta(id, cest.productosRecogidos.get(i).getNombre());
+        try {
+            // TODO add your handling code here:
+            id = gest.comprobacionID();
+            for (int i = 0; i < cest.getProductosRecogidos().size(); i++) {
+                cest.llenarCesta(id, cest.getProductosRecogidos().get(i).getNombre());
+            }
+            for (int i = 0; i < jtProductos.getRowCount(); i++) {
+                dtm.removeRow(i);
+                i -= 1;
+            }
+            cest.getProductosRecogidos().clear();
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
         }
-        for (int i = 0; i < jtProductos.getRowCount(); i++) {
-            dtm.removeRow(i);
-            i -= 1;
-        }
-        cest.productosRecogidos.clear();
 
     }//GEN-LAST:event_jbGuardarActionPerformed
 
     private void jbPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPDFActionPerformed
-        // TODO add your handling code here:
-        cest.recuperarPedidos();
-        cest.generarPDF();
+        try {
+            // TODO add your handling code here:
+            cest.recuperarPedidos();
+            cest.insertatDatosPDF();
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
+        } catch (DocumentException | FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error al generar el documento PDF", "Error PDF", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jbPDFActionPerformed
 
     private void jbGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGenerarActionPerformed
-        // TODO add your handling code here:
-        cest.recuperarPedidos();
-        cest.exportarHtml();
+        try {
+            // TODO add your handling code here:
+            cest.recuperarPedidos();
+            cest.introducirDatosHtml();
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, "Error al generar el documento HTML", "Error HTML", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jbGenerarActionPerformed
 
 
