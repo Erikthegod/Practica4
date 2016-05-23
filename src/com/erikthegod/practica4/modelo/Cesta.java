@@ -8,6 +8,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,7 +24,8 @@ public class Cesta {
     private ArrayList<Integer> idPedido = new ArrayList();
     GestorBBDD gest = new GestorBBDD();
     GestorArchivos gestAr = new GestorArchivos();
-    public static final String fuentePDF = "arial";
+    public static final String FUENTE_PDF = "arial";
+    public static final String SIMBOLO_MONEDA = "€";
 
     public void llenarCesta(int id, String producto) throws ClassNotFoundException, SQLException {
         gest.conectar();
@@ -47,9 +49,9 @@ public class Cesta {
         gest.c.close();
     }
 
-    public void insertatDatosPDF() throws DocumentException, FileNotFoundException {
-        gestAr.generarPDF();
-        gestAr.documento.add(new Paragraph("Lista Pedidos", FontFactory.getFont(fuentePDF, // fuente
+    public void insertatDatosPDF(File nombreArchivo) throws DocumentException, FileNotFoundException {
+        gestAr.generarPDF(nombreArchivo);
+        gestAr.documento.add(new Paragraph("Lista Pedidos", FontFactory.getFont(FUENTE_PDF, // fuente
                 22, // tamaño
                 Font.ITALIC, // estilo
                 BaseColor.GRAY)));
@@ -62,25 +64,24 @@ public class Cesta {
         for (int i = 0; i < productosRecogidos.size(); i++) {
             gestAr.tabla.addCell(productosRecogidos.get(i).getCategoria());
             gestAr.tabla.addCell(productosRecogidos.get(i).getNombre());
-            gestAr.tabla.addCell(productosRecogidos.get(i).getPrecio().toString());
+            gestAr.tabla.addCell(productosRecogidos.get(i).getPrecio().toString() + SIMBOLO_MONEDA);
             gestAr.tabla.addCell(idPedido.get(i).toString());
         }
         gestAr.documento.add(gestAr.tabla);
         gestAr.documento.close();
     }
 
-    public void introducirDatosHtml() throws FileNotFoundException {
-        gestAr.exportarHTML();
+    public void introducirDatosHtml(File nombreArchivo) throws FileNotFoundException {
+        gestAr.exportarHTML(nombreArchivo);
         for (int i = 0; i < productosRecogidos.size(); i++) {
             gestAr.fichero.println("<tr>");
             gestAr.fichero.println("<td>" + productosRecogidos.get(i).getNombre() + "</td>");
             gestAr.fichero.println("<td>" + productosRecogidos.get(i).getCategoria() + "</td>");
-            gestAr.fichero.println("<td>" + productosRecogidos.get(i).getPrecio() + "</td>");
+            gestAr.fichero.println("<td>" + productosRecogidos.get(i).getPrecio() + SIMBOLO_MONEDA + "</td>");
             gestAr.fichero.println("<td>" + idPedido.get(i) + "</td>");
             gestAr.fichero.println("</tr>");
         }
         gestAr.fichero.close();
-
     }
 
     public ArrayList<Producto> getProductosRecogidos() {

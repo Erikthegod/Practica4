@@ -10,9 +10,11 @@ import com.erikthegod.practica4.modelo.Cesta;
 import com.erikthegod.practica4.persistencia.GestorBBDD;
 import com.erikthegod.practica4.modelo.Producto;
 import com.itextpdf.text.DocumentException;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Vector;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -27,10 +29,12 @@ public class JPVentana extends javax.swing.JPanel {
     Cesta cest = new Cesta();
     Categoria cat = new Categoria();
     Producto pro = new Producto();
-    String categoria;
-    String producto;
+    private String producto;
     int id;
     DefaultTableModel dtm;
+    public static final String SIMBOLO_MONEDA = "€";
+    JFileChooser file;
+    File nombreArchivo;
 
     /**
      * Creates new form JPVentana
@@ -211,7 +215,7 @@ public class JPVentana extends javax.swing.JPanel {
                 dtm.setRowCount(dtm.getRowCount() + 1);
                 jtProductos.setValueAt(cest.getProductosRecogidos().get(i).getCategoria(), i, 0);
                 jtProductos.setValueAt(cest.getProductosRecogidos().get(i).getNombre(), i, 1);
-                jtProductos.setValueAt(cest.getProductosRecogidos().get(i).getPrecio(), i, 2);
+                jtProductos.setValueAt(cest.getProductosRecogidos().get(i).getPrecio() + SIMBOLO_MONEDA, i, 2);
             }
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
@@ -222,7 +226,7 @@ public class JPVentana extends javax.swing.JPanel {
 
     private void jbNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoActionPerformed
 
-        int resp = JOptionPane.showConfirmDialog(null, "Desea crear un pedido nuevo,se borrara todo lo que no haya sido guardado", "Precaucion", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_OPTION);
+        int resp = JOptionPane.showConfirmDialog(null, "Desea crear un pedido nuevo,se borrara todo lo que no haya sido guardado", "Información", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_OPTION);
         if (JOptionPane.YES_OPTION == resp) {
             try {
                 jbAniadir.setEnabled(true);
@@ -276,9 +280,15 @@ public class JPVentana extends javax.swing.JPanel {
 
     private void jbPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPDFActionPerformed
         try {
-            // TODO add your handling code here:
-            cest.recuperarPedidos();
-            cest.insertatDatosPDF();
+            file = new JFileChooser();
+            int result = file.showSaveDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                nombreArchivo = file.getSelectedFile();
+                cest.recuperarPedidos();
+                cest.insertatDatosPDF(nombreArchivo);
+                JOptionPane.showMessageDialog(null, "PDF creado correctamente");
+            } else if (result == JFileChooser.CANCEL_OPTION) {
+            }
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
@@ -290,9 +300,15 @@ public class JPVentana extends javax.swing.JPanel {
 
     private void jbGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGenerarActionPerformed
         try {
-            // TODO add your handling code here:
-            cest.recuperarPedidos();
-            cest.introducirDatosHtml();
+            file = new JFileChooser();
+            int result = file.showSaveDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                nombreArchivo = file.getSelectedFile();
+                cest.recuperarPedidos();
+                cest.introducirDatosHtml(nombreArchivo);
+                JOptionPane.showMessageDialog(null, "HTML creado correctamente");
+            } else if (result == JFileChooser.CANCEL_OPTION) {
+            }
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
