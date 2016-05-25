@@ -5,10 +5,10 @@
  */
 package com.erikthegod.practica4.gui;
 
-import com.erikthegod.practica4.modelo.Categoria;
-import com.erikthegod.practica4.modelo.Cesta;
-import com.erikthegod.practica4.persistencia.GestorBBDD;
-import com.erikthegod.practica4.modelo.Producto;
+import com.erikthegod.practica4.modelopersistencia.Categoria;
+import com.erikthegod.practica4.modelopersistencia.Cesta;
+import com.erikthegod.practica4.modelopersistencia.GestorBBDD;
+import com.erikthegod.practica4.modelopersistencia.Producto;
 import com.itextpdf.text.DocumentException;
 import java.io.File;
 import java.io.FileNotFoundException;
