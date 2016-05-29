@@ -16,10 +16,10 @@ public class JFVentana extends javax.swing.JFrame {
      */
     public JFVentana() {
         initComponents();
-        this.setTitle("InstaJ1");
+        this.setTitle("TiendaVirtual");
         JPVentana jpVentana = new JPVentana();
         this.getContentPane().add(jpVentana);
-        setBounds(100, 100, 600, 600);
+        setBounds(100, 100, 640, 600);
         setVisible(true);
     }
 

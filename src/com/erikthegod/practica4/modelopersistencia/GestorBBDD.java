@@ -17,6 +17,8 @@ public class GestorBBDD {
     public Statement stmt = null;//Sentencia
     public String sql = null;//Cadena con la sentencia sql
     public ResultSet rs = null;//Conjunto de resultados
+    public static final String CONEXION_CASA = "jdbc:sqlite:E:/Grado/Programacion/Proyectos/Practica4/pedidos.db";
+    public static final String CONEXION_CLASE = "jdbc:sqlite:E:/Proyectos/Practica4/pedidos.db";
 
     /**
      * Metodo que crea una conexion con la BBDD
@@ -26,7 +28,7 @@ public class GestorBBDD {
      */
     public void conectar() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");//Carga del driver
-        c = DriverManager.getConnection("jdbc:sqlite:E:/Proyectos/Practica4/pedidos.db");
+        c = DriverManager.getConnection(CONEXION_CASA);
         stmt = c.createStatement();
     }
 

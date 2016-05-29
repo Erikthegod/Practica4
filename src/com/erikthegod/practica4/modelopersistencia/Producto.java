@@ -14,9 +14,9 @@ public class Producto {
     private String nombre;
     private int precio;
     private String categoria;
-    GestorBBDD gest = new GestorBBDD();// Instancia de un objeto de la clase GestorBBDD
-    public static Producto pro;// Declaracion de un objeto Producto,al ser static este objeto es igual en todas las clases
-    public static ArrayList<Producto> productos = new ArrayList();// Declaracion de un array de objetos Producto,al ser static este array es igual en todas las clases
+    GestorBBDD gest = new GestorBBDD();//Instancia de un objeto de la clase GestorBBDD
+    public static Producto pro;//Declaracion de un objeto Producto,al ser static este objeto es igual en todas las clases
+    public static ArrayList<Producto> productos = new ArrayList();//Declaracion de un array de objetos Producto de la misma categoria,al ser static este array es igual en todas las clases
 
     /**
      * Constructor de la clase
@@ -47,14 +47,14 @@ public class Producto {
      * @throws SQLException
      */
     public Producto recogerPrecio(String producto) throws ClassNotFoundException, SQLException {
-        gest.conectar();
-        gest.sql = "SELECT * from producto where nombrePro='" + producto + "'";
+        gest.conectar();//Conecta con la BBDD
+        gest.sql = "SELECT * from producto where nombrePro='" + producto + "'";//Realiza un select en la base de datos cogiendo los datos de la tabla producto donde el nombre del producto sea el que se le ha pasado al metodo
         gest.rs = gest.stmt.executeQuery(gest.sql);
-        while (gest.rs.next()) {
-            pro = new Producto(gest.rs.getString("nombrePro"), gest.rs.getInt("precio"), gest.rs.getString("nombre_cat"));
+        while (gest.rs.next()) {//Recorre los resultados obtenidos por el select
+            pro = new Producto(gest.rs.getString("nombrePro"), gest.rs.getInt("precio"), gest.rs.getString("nombre_cat"));//Instancia de un objeto de la clase producto al que se le pasan los datos recogidos de la BBDD
         }
-        gest.c.close();
-        return pro;
+        gest.c.close();//Cierre de conexion
+        return pro;//Retorna el producto instanciado
     }
 
     /**
@@ -66,14 +66,14 @@ public class Producto {
      * @throws SQLException
      */
     public void recogerProductos(String categoria) throws ClassNotFoundException, SQLException {
-        gest.conectar();
-        gest.sql = "SELECT * from producto where nombre_cat='" + categoria + "'";
+        gest.conectar();//Conecta con la BBDD
+        gest.sql = "SELECT * from producto where nombre_cat='" + categoria + "'";//Realiza un select en la base de datos cogiendo los datos de la tabla producto donde la categoria del producto sea el que se le ha pasado al metodo
         gest.rs = gest.stmt.executeQuery(gest.sql);
-        while (gest.rs.next()) {
-            pro = new Producto(gest.rs.getString("nombrePro"), gest.rs.getInt("precio"), gest.rs.getString("nombre_cat"));
-            productos.add(pro);
+        while (gest.rs.next()) {//Recorre los resultados obtenidos por el select
+            pro = new Producto(gest.rs.getString("nombrePro"), gest.rs.getInt("precio"), gest.rs.getString("nombre_cat"));//Instancia de un objeto de la clase producto al que se le pasan los datos recogidos de la BBDD
+            productos.add(pro);//Se agrega el objeto instanciado al array de productos , donde guardaremos los productos de la misma categoria
         }
-        gest.c.close();
+        gest.c.close();//Cierre de conexion
     }
 
     public String getNombre() {

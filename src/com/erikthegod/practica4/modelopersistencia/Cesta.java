@@ -12,39 +12,60 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
+ * Clase que representa una cesta , va guardando los productos de un pedido y
+ * los va insertando en la BBDD , tambien crea ficheros html y pdf con los
+ * pedidos de la BBDD
  *
- * @author dam
+ * @author ErikTheGod
  */
 public class Cesta {
 
     private ArrayList<Producto> productosRecogidos = new ArrayList();
-    Producto pro;
     private ArrayList<Integer> idPedido = new ArrayList();
-    GestorBBDD gest = new GestorBBDD();
-    GestorArchivos gestAr = new GestorArchivos();
-    public static final String FUENTE_PDF = "arial";
-    public static final String SIMBOLO_MONEDA = "€";
+    private int precioFinal;
+    GestorBBDD gest = new GestorBBDD(); //Instancia de un objeto de la clase GestorBBDD
+    GestorArchivos gestAr = new GestorArchivos(); //Instancia de un objeto de la clase GestorArchivos
+    Producto pro;//Declaracion de un objeto de la clase Producto
+    public static final String FUENTE_PDF = "arial";//Constante que contiene la fuente del pdf
+    public static final String SIMBOLO_MONEDA = "€";//Constante que contiene la moneda usada
 
+    /**
+     * Metodo que inserta en la BBDD los productos de la cesta
+     *
+     * @param id ID del pedido al que corresponde el producto
+     * @param producto Nombre del producto a introducir
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public void llenarCesta(int id, String producto) throws ClassNotFoundException, SQLException {
-        gest.conectar();
-        gest.sql = "insert into pedido_producto values (" + id + ",'" + producto + "');";
+        gest.conectar();//Conecta con la BBDD
+        gest.sql = "insert into pedido_producto values (" + id + ",'" + producto + "');";//Insercion de los productos y el id del pedido en la BBDD
         gest.stmt.executeUpdate(gest.sql);
-        gest.c.close();
+        gest.c.close();//Cierra conexion
     }
 
+    /**
+     * Metodo que recoge todos los productos de todos los pedidos en un array de
+     * productos recogidos y por cada producto un id en un array de integer
+     *
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public void recuperarPedidos() throws ClassNotFoundException, SQLException {
-        gest.conectar();
-        productosRecogidos.clear();
-        gest.sql = "Select nombrePro , precio , nombre_cat , id_pedido\n"
+        gest.conectar();//Conecta con la BBDD
+        productosRecogidos.clear();//Se vacia el array static
+        precioFinal = 0;
+        gest.sql = "Select nombrePro , precio , nombre_cat , id_pedido\n"//Select que recoge los productos con su id de pedido correspondiente
                 + "from pedido_producto , producto\n"
                 + "where  nombrePro = producto_pedidos;";
         gest.rs = gest.stmt.executeQuery(gest.sql);
-        while (gest.rs.next()) {
-            pro = new Producto(gest.rs.getString("nombrePro"), gest.rs.getInt("precio"), gest.rs.getString("nombre_cat"));
-            productosRecogidos.add(pro);
-            idPedido.add(gest.rs.getInt("id_pedido"));
+        while (gest.rs.next()) {//Recorre los resultados obtenidos por el select
+            pro = new Producto(gest.rs.getString("nombrePro"), gest.rs.getInt("precio"), gest.rs.getString("nombre_cat"));//Instancia de un objeto de la clase producto al que se le pasan los datos recogidos de la BBDD
+            productosRecogidos.add(pro);//Agrega el producto instanciado a un array de productos recogidos 
+            idPedido.add(gest.rs.getInt("id_pedido"));//Agrega el id del pedido de cada producto a un array de id's
+            precioFinal = precioFinal + gest.rs.getInt("precio");//Incrementa el precio final con el precio de cada producto recogido
         }
-        gest.c.close();
+        gest.c.close();//Cierra conexion
     }
 
     public void insertatDatosPDF(File nombreArchivo) throws DocumentException, FileNotFoundException {
@@ -65,6 +86,11 @@ public class Cesta {
             gestAr.tabla.addCell(productosRecogidos.get(i).getPrecio().toString() + SIMBOLO_MONEDA);
             gestAr.tabla.addCell(idPedido.get(i).toString());
         }
+        System.out.println(precioFinal);
+        gestAr.tabla.addCell("");
+        gestAr.tabla.addCell("");
+        gestAr.tabla.addCell(precioFinal + SIMBOLO_MONEDA + "");
+        gestAr.tabla.addCell("Precio Total");
         gestAr.documento.add(gestAr.tabla);
         gestAr.documento.close();
     }
@@ -79,6 +105,12 @@ public class Cesta {
             gestAr.fichero.println("<td>" + idPedido.get(i) + "</td>");
             gestAr.fichero.println("</tr>");
         }
+        gestAr.fichero.println("<tr>");
+        gestAr.fichero.println("<td> </td>");
+        gestAr.fichero.println("<td> </td>");
+        gestAr.fichero.println("<td>" + precioFinal + SIMBOLO_MONEDA + "</td>");
+        gestAr.fichero.println("<td>Precio Total</td>");
+        gestAr.fichero.println("</tr>");
         gestAr.fichero.close();
     }
 
