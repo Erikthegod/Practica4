@@ -10,9 +10,9 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
 /**
- * Metodo que maneja ficheros
+ * Clase que maneja ficheros
  *
- * @author kinton
+ * @author ErikTheGod
  */
 public class GestorArchivos {
 
@@ -40,7 +40,7 @@ public class GestorArchivos {
     }
 
     /**
-     * Metodo que genera un html
+     * Metodo que genera un html con tabla
      *
      * @param nombreArchivo nombre del archivo html
      * @throws FileNotFoundException

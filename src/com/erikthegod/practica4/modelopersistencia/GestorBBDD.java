@@ -9,7 +9,7 @@ import java.sql.Statement;
 /**
  * Clase que maneja la BBDD
  *
- * @author dam
+ * @author ErikTheGod
  */
 public class GestorBBDD {
 
@@ -17,8 +17,8 @@ public class GestorBBDD {
     public Statement stmt = null;//Sentencia
     public String sql = null;//Cadena con la sentencia sql
     public ResultSet rs = null;//Conjunto de resultados
-    public static final String CONEXION_CASA = "jdbc:sqlite:E:/Grado/Programacion/Proyectos/Practica4/pedidos.db";
-    public static final String CONEXION_CLASE = "jdbc:sqlite:E:/Proyectos/Practica4/pedidos.db";
+    public static final String CONEXION_CASA = "jdbc:sqlite:E:/Grado/Programacion/Proyectos/Practica4/pedidos.db";//Constante conexion en casa
+    public static final String CONEXION_CLASE = "jdbc:sqlite:E:/Proyectos/Practica4/pedidos.db";//Constante conexion clase
 
     /**
      * Metodo que crea una conexion con la BBDD
@@ -42,12 +42,12 @@ public class GestorBBDD {
     public int comprobacionID() throws ClassNotFoundException, SQLException {
         int id = 0;
         conectar();
-        sql = "Select count(*) from pedidos;";
+        sql = "Select count(*) from pedidos;";//Cuenta los pedidos que hay
         rs = stmt.executeQuery(sql);
-        if (rs.getInt("count(*)") == 0) {
+        if (rs.getInt("count(*)") == 0) {//Si no hay ningun pedido inserta el primer id pedido
             sql = "insert into pedidos values (0);";
             stmt.executeUpdate(sql);
-        } else {
+        } else {//Si ya hay pedidos busca el id mayor que hay para insertar uno mas y nunca repetir
             sql = "Select id_pedidos from pedidos where id_pedidos = (select max(id_pedidos) from pedidos);";
             rs = stmt.executeQuery(sql);
             id = rs.getInt("id_pedidos") + 1;
