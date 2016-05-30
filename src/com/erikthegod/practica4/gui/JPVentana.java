@@ -30,7 +30,7 @@ public class JPVentana extends javax.swing.JPanel {
     Categoria cat = new Categoria();
     Producto pro = new Producto();
     private String producto;
-    int id;
+    private int id;
     DefaultTableModel dtm;
     public static final String SIMBOLO_MONEDA = "€";
     public static final String CATEGORIA = "Categoria";
@@ -40,7 +40,7 @@ public class JPVentana extends javax.swing.JPanel {
     File nombreArchivo;
 
     /**
-     * Creates new form JPVentana
+     * Constructor del Panel
      */
     public JPVentana() {
         initComponents();
@@ -192,7 +192,10 @@ public class JPVentana extends javax.swing.JPanel {
                 .addContainerGap(45, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
+/**
+     * ComboBox de categorias que al modificarlo varia el ComboBox de productos
+     *
+     */
     private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed
         try {
             jcbProducto.removeAllItems();
@@ -207,9 +210,13 @@ public class JPVentana extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jcbCategoriaActionPerformed
-
+    /**
+     * Boton que añade un producto a la cesta y a la lista
+     *
+     */
     private void jbAniadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAniadirActionPerformed
         try {
+            jbGuardar.setEnabled(true);
             dtm = new DefaultTableModel(vNombres, 0);
             jtProductos.setModel(dtm);
             producto = (String) jcbProducto.getSelectedItem();
@@ -226,15 +233,19 @@ public class JPVentana extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbAniadirActionPerformed
-
+    /**
+     * Desbloquea los botones y genera un pedido nuevo , si hay algo en la lista
+     * se pierden los datos
+     *
+     */
     private void jbNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoActionPerformed
 
         int resp = JOptionPane.showConfirmDialog(null, "Desea crear un pedido nuevo,se borrara todo lo que no haya sido guardado", "Información", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_OPTION);
         if (JOptionPane.YES_OPTION == resp) {
             try {
+                jbGuardar.setEnabled(false);
                 jbAniadir.setEnabled(true);
                 jbGenerar.setEnabled(true);
-                jbGuardar.setEnabled(true);
                 jcbCategoria.setEnabled(true);
                 jcbProducto.setEnabled(true);
                 jbPDF.setEnabled(true);
@@ -253,14 +264,17 @@ public class JPVentana extends javax.swing.JPanel {
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Error Base de Datos", JOptionPane.ERROR_MESSAGE);
             }
 
         }
 
 
     }//GEN-LAST:event_jbNuevoActionPerformed
-
+    /**
+     * Guarda los productos añadidos en un pedido nuevo en la bbdd
+     *
+     */
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
         try {
             // TODO add your handling code here:
@@ -282,6 +296,11 @@ public class JPVentana extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jbGuardarActionPerformed
 
+    /**
+     * Generamos un pdf , te pide la ubicacion donde lo quieres guardar y el
+     * nombre
+     *
+     */
     private void jbPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPDFActionPerformed
         try {
             file = new JFileChooser();
@@ -302,6 +321,10 @@ public class JPVentana extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jbPDFActionPerformed
 
+    /**
+     * Genera un html, te pide la ubicacion donde lo queres guardar y el nombre
+     *
+     */
     private void jbGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGenerarActionPerformed
         try {
             file = new JFileChooser();
