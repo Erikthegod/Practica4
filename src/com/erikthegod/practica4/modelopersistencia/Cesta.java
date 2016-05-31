@@ -57,7 +57,7 @@ public class Cesta {
         precioFinal = 0;
         gest.sql = "Select nombrePro , precio , nombre_cat , id_pedido\n"//Select que recoge los productos con su id de pedido correspondiente
                 + "from pedido_producto , producto\n"
-                + "where  nombrePro = producto_pedidos;";
+                + "where  nombrePro = producto_pedidos order by nombre_cat;";
         gest.rs = gest.stmt.executeQuery(gest.sql);
         while (gest.rs.next()) {//Recorre los resultados obtenidos por el select
             pro = new Producto(gest.rs.getString("nombrePro"), gest.rs.getInt("precio"), gest.rs.getString("nombre_cat"));//Instancia de un objeto de la clase producto al que se le pasan los datos recogidos de la BBDD

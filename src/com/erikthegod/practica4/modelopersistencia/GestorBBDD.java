@@ -28,7 +28,7 @@ public class GestorBBDD {
      */
     public void conectar() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");//Carga del driver
-        c = DriverManager.getConnection(CONEXION_CASA);
+        c = DriverManager.getConnection(CONEXION_CLASE);
         stmt = c.createStatement();
     }
 

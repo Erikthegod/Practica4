@@ -52,6 +52,7 @@ public class GestorArchivos {
         fichero.println("<head>");
         fichero.println("<title> ErikTheGod </title>");
         fichero.println("</head>");
+        fichero.println("<meta charset='utf-8'>");
         fichero.println("<body bgcolor=\"blue\" text=\"white\">");
         fichero.println("<table border=\"5\" rules=\"all\">");
         fichero.println("<tr>");

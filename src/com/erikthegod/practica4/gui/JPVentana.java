@@ -192,7 +192,7 @@ public class JPVentana extends javax.swing.JPanel {
                 .addContainerGap(45, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-/**
+    /**
      * ComboBox de categorias que al modificarlo varia el ComboBox de productos
      *
      */
@@ -205,9 +205,9 @@ public class JPVentana extends javax.swing.JPanel {
                 jcbProducto.addItem(Producto.productos.get(i).getNombre());
             }
         } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Error conexion BBDD", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jcbCategoriaActionPerformed
     /**
@@ -216,7 +216,6 @@ public class JPVentana extends javax.swing.JPanel {
      */
     private void jbAniadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAniadirActionPerformed
         try {
-            jbGuardar.setEnabled(true);
             dtm = new DefaultTableModel(vNombres, 0);
             jtProductos.setModel(dtm);
             producto = (String) jcbProducto.getSelectedItem();
@@ -228,9 +227,9 @@ public class JPVentana extends javax.swing.JPanel {
                 jtProductos.setValueAt(cest.getProductosRecogidos().get(i).getPrecio() + SIMBOLO_MONEDA, i, 2);
             }
         } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Error conexion BBDD", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jbAniadirActionPerformed
     /**
@@ -243,7 +242,7 @@ public class JPVentana extends javax.swing.JPanel {
         int resp = JOptionPane.showConfirmDialog(null, "Desea crear un pedido nuevo,se borrara todo lo que no haya sido guardado", "Información", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_OPTION);
         if (JOptionPane.YES_OPTION == resp) {
             try {
-                jbGuardar.setEnabled(false);
+                jbGuardar.setEnabled(true);
                 jbAniadir.setEnabled(true);
                 jbGenerar.setEnabled(true);
                 jcbCategoria.setEnabled(true);
@@ -262,14 +261,24 @@ public class JPVentana extends javax.swing.JPanel {
                     jcbCategoria.addItem(Categoria.categorias.get(i).getNombre());
                 }
             } catch (ClassNotFoundException ex) {
-                JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
+                jbAniadir.setEnabled(false);
+                jbGenerar.setEnabled(false);
+                jbGuardar.setEnabled(false);
+                jcbCategoria.setEnabled(false);
+                jcbProducto.setEnabled(false);
+                jbPDF.setEnabled(false);
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Error Base de Datos", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Error conexion BBDD", JOptionPane.ERROR_MESSAGE);
+                jbAniadir.setEnabled(false);
+                jbGenerar.setEnabled(false);
+                jbGuardar.setEnabled(false);
+                jcbCategoria.setEnabled(false);
+                jcbProducto.setEnabled(false);
+                jbPDF.setEnabled(false);
             }
 
         }
-
-
     }//GEN-LAST:event_jbNuevoActionPerformed
     /**
      * Guarda los productos añadidos en un pedido nuevo en la bbdd
@@ -278,20 +287,25 @@ public class JPVentana extends javax.swing.JPanel {
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
         try {
             // TODO add your handling code here:
-            id = gest.comprobacionID();
-            for (int i = 0; i < cest.getProductosRecogidos().size(); i++) {
-                cest.llenarCesta(id, cest.getProductosRecogidos().get(i).getNombre());
+            if (cest.getProductosRecogidos().size() == 0) {
+                JOptionPane.showMessageDialog(null, "No se puede guardar un pedido sin añadir productos");
+            } else {
+                id = gest.comprobacionID();
+                for (int i = 0; i < cest.getProductosRecogidos().size(); i++) {
+                    cest.llenarCesta(id, cest.getProductosRecogidos().get(i).getNombre());
+                }
+                for (int i = 0; i < jtProductos.getRowCount(); i++) {
+                    dtm.removeRow(i);
+                    i -= 1;
+                }
+                JOptionPane.showMessageDialog(null, "El pedido ha sido guardado correctamente");
+                jbGuardar.setEnabled(false);
+                cest.getProductosRecogidos().clear();
             }
-            for (int i = 0; i < jtProductos.getRowCount(); i++) {
-                dtm.removeRow(i);
-                i -= 1;
-            }
-            JOptionPane.showMessageDialog(null, "El pedido ha sido guardado correctamente");
-            cest.getProductosRecogidos().clear();
         } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Error conexion BBDD", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_jbGuardarActionPerformed
@@ -313,9 +327,9 @@ public class JPVentana extends javax.swing.JPanel {
             } else if (result == JFileChooser.CANCEL_OPTION) {
             }
         } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Error conexion BBDD", JOptionPane.ERROR_MESSAGE);
         } catch (DocumentException | FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error al generar el documento PDF", "Error PDF", JOptionPane.ERROR_MESSAGE);
         }
@@ -337,9 +351,9 @@ public class JPVentana extends javax.swing.JPanel {
             } else if (result == JFileChooser.CANCEL_OPTION) {
             }
         } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos", "Base de Datos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error de SQL", "Error SQL", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Error conexion BBDD", JOptionPane.ERROR_MESSAGE);
         } catch (FileNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error al generar el documento HTML", "Error HTML", JOptionPane.ERROR_MESSAGE);
         }
