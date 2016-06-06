@@ -35,8 +35,8 @@ public class Cesta {
      *
      * @param id ID del pedido al que corresponde el producto
      * @param producto Nombre del producto a introducir
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @throws ClassNotFoundException Lanza una excepcion causada por la falta del driver de la BBDD
+     * @throws SQLException Lanza una excepcion causada por un error en la conexion a la BBDD
      */
     public void llenarCesta(int id, String producto) throws ClassNotFoundException, SQLException {
         gest.conectar();//Conecta con la BBDD
@@ -49,8 +49,8 @@ public class Cesta {
      * Metodo que recoge todos los productos de todos los pedidos en un array de
      * productos recogidos y por cada producto un id en un array de integer
      *
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @throws ClassNotFoundException Lanza una excepcion causada por la falta del driver de la BBDD
+     * @throws SQLException Lanza una excepcion causada por un error en la conexion a la BBDD
      */
     public void recuperarPedidos() throws ClassNotFoundException, SQLException {
         gest.conectar();//Conecta con la BBDD
@@ -74,8 +74,8 @@ public class Cesta {
      * de un pdf
      *
      * @param nombreArchivo Nombre del archivo pdf
-     * @throws DocumentException
-     * @throws FileNotFoundException
+     * @throws DocumentException Lanza una excepcion causada por error al generar el documento
+     * @throws FileNotFoundException Lanza una excepcion causada por error al generar el archivo
      */
     public void insertatDatosPDF(File nombreArchivo) throws DocumentException, FileNotFoundException {
         gestAr.generarPDF(nombreArchivo);//Llama a un metodo de la clase GestorArchivo que crea un documento pdf
@@ -108,7 +108,7 @@ public class Cesta {
      * de un archivo html
      *
      * @param nombreArchivo Nombre del html generado
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException Lanza una excepcion causada por error al generar el archivo
      */
     public void introducirDatosHtml(File nombreArchivo) throws FileNotFoundException {
         gestAr.exportarHTML(nombreArchivo);//Llama a un metodo de GestorArchivos que crea un fichero html

@@ -35,8 +35,8 @@ public class Categoria {
      * Metodo que recoge de la BBDD los nombres de las categorias y se los va a
      * asignando a objetos Categoria que se van guardando en un array
      *
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @throws ClassNotFoundException Lanza una excepcion causada por la falta del driver de la BBDD
+     * @throws SQLException Lanza una excepcion causada por un error en la conexion a la BBDD
      */
     public void recogerCategorias() throws ClassNotFoundException, SQLException {
         gest.conectar();//Conecta con la BBDD

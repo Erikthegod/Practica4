@@ -6,13 +6,14 @@
 package com.erikthegod.practica4.gui;
 
 /**
+ * Clase del JFrame
  *
- * @author dam
+ * @author ErikTheGod
  */
 public class JFVentana extends javax.swing.JFrame {
 
     /**
-     * Creates new form JFVentana
+     * Constructor JFrame
      */
     public JFVentana() {
         initComponents();

@@ -43,8 +43,8 @@ public class Producto {
      *
      * @param producto Nombre del producto que queremos recoger
      * @return Retorna un producto con datos de la BBDD
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @throws ClassNotFoundException Lanza una excepcion causada por la falta del driver de la BBDD
+     * @throws SQLException Lanza una excepcion causada por un error en la conexion a la BBDD
      */
     public Producto recogerPrecio(String producto) throws ClassNotFoundException, SQLException {
         gest.conectar();//Conecta con la BBDD
@@ -62,8 +62,8 @@ public class Producto {
      * productos
      *
      * @param categoria Nombre de la categoria de la que queremos los objetos
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @throws ClassNotFoundException Lanza una excepcion causada por la falta del driver de la BBDD
+     * @throws SQLException Lanza una excepcion causada por un error en la conexion a la BBDD
      */
     public void recogerProductos(String categoria) throws ClassNotFoundException, SQLException {
         gest.conectar();//Conecta con la BBDD

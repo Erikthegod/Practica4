@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
+ * Clase del JPanel
  *
  * @author ErikTheGod
  */
@@ -24,15 +25,15 @@ public class JPVentana extends javax.swing.JPanel {
     Cesta cest = new Cesta();
     Categoria cat = new Categoria();
     Producto pro = new Producto();
+    DefaultTableModel dtm;
+    JFileChooser file;
+    File nombreArchivo;
     private String producto;
     private int id;
-    DefaultTableModel dtm;
     public static final String SIMBOLO_MONEDA = "€";
     public static final String CATEGORIA = "Categoria";
     public static final String PRODUCTO = "Producto";
     public static final String PRECIO = "Precio";
-    JFileChooser file;
-    File nombreArchivo;
 
     /**
      * Constructor del Panel
@@ -308,8 +309,10 @@ public class JPVentana extends javax.swing.JPanel {
                 cest.recuperarPedidos();
                 cest.insertatDatosPDF(nombreArchivo);
                 JOptionPane.showMessageDialog(null, "PDF creado correctamente");
+                cest.getProductosRecogidos().clear();
             } else if (result == JFileChooser.CANCEL_OPTION) {
             }
+
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
@@ -332,6 +335,7 @@ public class JPVentana extends javax.swing.JPanel {
                 cest.recuperarPedidos();
                 cest.introducirDatosHtml(nombreArchivo);
                 JOptionPane.showMessageDialog(null, "HTML creado correctamente");
+                cest.getProductosRecogidos().clear();
             } else if (result == JFileChooser.CANCEL_OPTION) {
             }
         } catch (ClassNotFoundException ex) {

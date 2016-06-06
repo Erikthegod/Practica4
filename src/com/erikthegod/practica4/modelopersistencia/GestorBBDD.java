@@ -22,8 +22,8 @@ public class GestorBBDD {
     /**
      * Metodo que crea una conexion con la BBDD
      *
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @throws ClassNotFoundException Lanza una excepcion causada por la falta del driver de la BBDD
+     * @throws SQLException Lanza una excepcion causada por un error en la conexion a la BBDD
      */
     public void conectar() throws ClassNotFoundException, SQLException {
         Class.forName("org.sqlite.JDBC");//Carga del driver
@@ -35,8 +35,8 @@ public class GestorBBDD {
      * Metodo que comprueba el id del ultimo pedido para no repetir
      *
      * @return Retorna el siguiente id libre
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @throws ClassNotFoundException Lanza una excepcion causada por la falta del driver de la BBDD
+     * @throws SQLException Lanza una excepcion causada por un error en la conexion a la BBDD
      */
     public int comprobacionID() throws ClassNotFoundException, SQLException {
         int id = 0;

@@ -28,8 +28,8 @@ public class GestorArchivos {
      * Metodo que genera un pdf
      *
      * @param nombreArchivo nombre del archivo pdf
-     * @throws FileNotFoundException
-     * @throws DocumentException
+     * @throws FileNotFoundException Lanza una excepcion causada por error al generar el archivo
+     * @throws DocumentException Lanza una excepcion causada por error al generar el documento
      */
     public void generarPDF(File nombreArchivo) throws FileNotFoundException, DocumentException {
         documento = new Document();
@@ -43,7 +43,7 @@ public class GestorArchivos {
      * Metodo que genera un html con tabla
      *
      * @param nombreArchivo nombre del archivo html
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException Lanza una excepcion causada por error al generar el archivo
      */
     public void exportarHTML(File nombreArchivo) throws FileNotFoundException {
         fichero = new PrintWriter(nombreArchivo + EXTENSION_HTML);
