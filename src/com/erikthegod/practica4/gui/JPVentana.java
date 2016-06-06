@@ -10,10 +10,12 @@ import com.erikthegod.practica4.modelopersistencia.Cesta;
 import com.erikthegod.practica4.modelopersistencia.GestorBBDD;
 import com.erikthegod.practica4.modelopersistencia.Producto;
 import com.itextpdf.text.DocumentException;
+import com.sun.java.swing.plaf.windows.resources.windows;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Vector;
+import static javafx.application.Platform.exit;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -262,20 +264,10 @@ public class JPVentana extends javax.swing.JPanel {
                 }
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
-                jbAniadir.setEnabled(false);
-                jbGenerar.setEnabled(false);
-                jbGuardar.setEnabled(false);
-                jcbCategoria.setEnabled(false);
-                jcbProducto.setEnabled(false);
-                jbPDF.setEnabled(false);
+                System.exit(0); 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Error conexion BBDD", JOptionPane.ERROR_MESSAGE);
-                jbAniadir.setEnabled(false);
-                jbGenerar.setEnabled(false);
-                jbGuardar.setEnabled(false);
-                jcbCategoria.setEnabled(false);
-                jcbProducto.setEnabled(false);
-                jbPDF.setEnabled(false);
+                System.exit(0); 
             }
 
         }
