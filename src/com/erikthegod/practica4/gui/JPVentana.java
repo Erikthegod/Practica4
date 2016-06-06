@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.erikthegod.practica4.gui;
 
 import com.erikthegod.practica4.modelopersistencia.Categoria;
@@ -10,19 +5,17 @@ import com.erikthegod.practica4.modelopersistencia.Cesta;
 import com.erikthegod.practica4.modelopersistencia.GestorBBDD;
 import com.erikthegod.practica4.modelopersistencia.Producto;
 import com.itextpdf.text.DocumentException;
-import com.sun.java.swing.plaf.windows.resources.windows;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Vector;
-import static javafx.application.Platform.exit;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author dam
+ * @author ErikTheGod
  */
 public class JPVentana extends javax.swing.JPanel {
 
@@ -241,7 +234,7 @@ public class JPVentana extends javax.swing.JPanel {
      */
     private void jbNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoActionPerformed
 
-        int resp = JOptionPane.showConfirmDialog(null, "Desea crear un pedido nuevo,se borrara todo lo que no haya sido guardado", "Información", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_OPTION);
+        int resp = JOptionPane.showConfirmDialog(null, "Desea crear un pedido nuevo, se borrara todo lo que no haya sido guardado", "Información", JOptionPane.INFORMATION_MESSAGE, JOptionPane.YES_OPTION);
         if (JOptionPane.YES_OPTION == resp) {
             try {
                 jbGuardar.setEnabled(true);
@@ -264,10 +257,10 @@ public class JPVentana extends javax.swing.JPanel {
                 }
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
-                System.exit(0); 
+                System.exit(0);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Error conexion BBDD", JOptionPane.ERROR_MESSAGE);
-                System.exit(0); 
+                System.exit(0);
             }
 
         }
@@ -291,7 +284,6 @@ public class JPVentana extends javax.swing.JPanel {
                     i -= 1;
                 }
                 JOptionPane.showMessageDialog(null, "El pedido ha sido guardado correctamente");
-                jbGuardar.setEnabled(false);
                 cest.getProductosRecogidos().clear();
             }
         } catch (ClassNotFoundException ex) {

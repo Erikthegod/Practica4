@@ -27,7 +27,8 @@ public class Cesta {
     GestorArchivos gestAr = new GestorArchivos(); //Instancia de un objeto de la clase GestorArchivos
     Producto pro;//Declaracion de un objeto de la clase Producto
     public static final String FUENTE_PDF = "arial";//Constante que contiene la fuente del pdf
-    public static final String SIMBOLO_MONEDA = "€";//Constante que contiene la moneda usada
+    public static final String SIMBOLO_MONEDA_HTML = "&euro;";//Constante que contiene la moneda usada
+    public static final String SIMBOLO_MONEDA_PDF = "€";//Constante que contiene la moneda usada
 
     /**
      * Metodo que inserta en la BBDD los productos de la cesta
@@ -91,12 +92,12 @@ public class Cesta {
         for (int i = 0; i < productosRecogidos.size(); i++) {//Agregamos filas cada una con los productos recogidos y su id pedido correspondiente
             gestAr.tabla.addCell(productosRecogidos.get(i).getCategoria());
             gestAr.tabla.addCell(productosRecogidos.get(i).getNombre());
-            gestAr.tabla.addCell(productosRecogidos.get(i).getPrecio().toString() + SIMBOLO_MONEDA);
+            gestAr.tabla.addCell(productosRecogidos.get(i).getPrecio().toString() + SIMBOLO_MONEDA_PDF);
             gestAr.tabla.addCell(idPedido.get(i).toString());
         }
         gestAr.tabla.addCell("");
         gestAr.tabla.addCell("");
-        gestAr.tabla.addCell(precioFinal + SIMBOLO_MONEDA + "");//Inserta el precio total de los productos
+        gestAr.tabla.addCell(precioFinal + SIMBOLO_MONEDA_PDF + "");//Inserta el precio total de los productos
         gestAr.tabla.addCell("Precio Total");
         gestAr.documento.add(gestAr.tabla);//Agrega la tabla creada al documento pdf
         gestAr.documento.close();
@@ -115,14 +116,14 @@ public class Cesta {
             gestAr.fichero.println("<tr>");
             gestAr.fichero.println("<td>" + productosRecogidos.get(i).getNombre() + "</td>");
             gestAr.fichero.println("<td>" + productosRecogidos.get(i).getCategoria() + "</td>");
-            gestAr.fichero.println("<td>" + productosRecogidos.get(i).getPrecio() + SIMBOLO_MONEDA + "</td>");
-            gestAr.fichero.println("<td>" + idPedido.get(i) + "</td>");
+            gestAr.fichero.println("<td align='right'>" + productosRecogidos.get(i).getPrecio() + SIMBOLO_MONEDA_HTML + "</td>");
+            gestAr.fichero.println("<td align='right'>" + idPedido.get(i) + "</td>");
             gestAr.fichero.println("</tr>");
         }
         gestAr.fichero.println("<tr>");
         gestAr.fichero.println("<td> </td>");
         gestAr.fichero.println("<td> </td>");
-        gestAr.fichero.println("<td>" + precioFinal + SIMBOLO_MONEDA + "</td>");//Inserta el precio total de los productos
+        gestAr.fichero.println("<td>" + precioFinal + SIMBOLO_MONEDA_HTML + "</td>");//Inserta el precio total de los productos
         gestAr.fichero.println("<td>Precio Total</td>");
         gestAr.fichero.println("</tr>");
         gestAr.fichero.close();

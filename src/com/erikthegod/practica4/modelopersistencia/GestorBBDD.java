@@ -17,8 +17,7 @@ public class GestorBBDD {
     public Statement stmt = null;//Sentencia
     public String sql = null;//Cadena con la sentencia sql
     public ResultSet rs = null;//Conjunto de resultados
-    public static final String CONEXION_CASA = "jdbc:sqlite:E:/Grado/Programacion/Proyectos/Practica4/pedidos.db";//Constante conexion en casa
-    public static final String CONEXION_CLASE = "jdbc:sqlite:E:/Proyectos/Practica4/pedidos.db";//Constante conexion clase
+    public static final String CONEXION_CLASE = "jdbc:sqlite:../pedidos.db";//Constante conexion clase
 
     /**
      * Metodo que crea una conexion con la BBDD
@@ -57,5 +56,4 @@ public class GestorBBDD {
         c.close();
         return id;
     }
-
 }
