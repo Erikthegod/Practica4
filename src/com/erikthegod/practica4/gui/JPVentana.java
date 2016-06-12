@@ -1,13 +1,15 @@
 package com.erikthegod.practica4.gui;
 
-import com.erikthegod.practica4.modelopersistencia.Categoria;
-import com.erikthegod.practica4.modelopersistencia.Cesta;
-import com.erikthegod.practica4.modelopersistencia.GestorBBDD;
-import com.erikthegod.practica4.modelopersistencia.Producto;
+import com.erikthegod.practica4.modelo.Categoria;
+import com.erikthegod.practica4.modelo.Cesta;
+import com.erikthegod.practica4.persistencia.GestorBBDD;
+import com.erikthegod.practica4.modelo.Producto;
+import com.erikthegod.practica4.persistencia.GestorArchivos;
 import com.itextpdf.text.DocumentException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -22,6 +24,7 @@ public class JPVentana extends javax.swing.JPanel {
 
     Vector vNombres;
     GestorBBDD gest = new GestorBBDD();
+    GestorArchivos gestAr = new GestorArchivos();
     Cesta cest = new Cesta();
     Categoria cat = new Categoria();
     Producto pro = new Producto();
@@ -34,6 +37,9 @@ public class JPVentana extends javax.swing.JPanel {
     public static final String CATEGORIA = "Categoria";
     public static final String PRODUCTO = "Producto";
     public static final String PRECIO = "Precio";
+    private ArrayList <Categoria> categorias = new ArrayList();
+    private ArrayList<Producto> productos ;//Declaracion de un array de objetos Producto de la misma categoria,al ser static este array es igual en todas las clases
+    
 
     /**
      * Constructor del Panel
@@ -195,10 +201,10 @@ public class JPVentana extends javax.swing.JPanel {
     private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed
         try {
             jcbProducto.removeAllItems();
-            Producto.productos.clear();
-            pro.recogerProductos((String) jcbCategoria.getSelectedItem());
-            for (int i = 0; i < Producto.productos.size(); i++) {
-                jcbProducto.addItem(Producto.productos.get(i).getNombre());
+            productos =  new ArrayList();
+            productos = gest.recogerProductos((String) jcbCategoria.getSelectedItem());
+            for (int i = 0; i < productos.size(); i++) {
+                jcbProducto.addItem(productos.get(i).getNombre());
             }
         } catch (ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
@@ -215,7 +221,7 @@ public class JPVentana extends javax.swing.JPanel {
             dtm = new DefaultTableModel(vNombres, 0);
             jtProductos.setModel(dtm);
             producto = (String) jcbProducto.getSelectedItem();
-            cest.getProductosRecogidos().add(pro.recogerPrecio(producto));
+            cest.getProductosRecogidos().add(gest.recogerPrecio(producto));
             for (int i = 0; i < cest.getProductosRecogidos().size(); i++) {
                 dtm.setRowCount(dtm.getRowCount() + 1);
                 jtProductos.setValueAt(cest.getProductosRecogidos().get(i).getCategoria(), i, 0);
@@ -244,18 +250,17 @@ public class JPVentana extends javax.swing.JPanel {
                 jcbCategoria.setEnabled(true);
                 jcbProducto.setEnabled(true);
                 jbPDF.setEnabled(true);
-                Categoria.categorias.clear();
                 jcbCategoria.removeAllItems();
                 jcbProducto.removeAllItems();
-                cest.getProductosRecogidos().clear();
+                categorias = gest.recogerCategorias();
                 for (int i = 0; i < jtProductos.getRowCount(); i++) {
                     dtm.removeRow(i);
                     i -= 1;
                 }
-                cat.recogerCategorias();
-                for (int i = 0; i < Categoria.categorias.size(); i++) {
-                    jcbCategoria.addItem(Categoria.categorias.get(i).getNombre());
+                for (int i = 0; i < categorias.size(); i++) {
+                    jcbCategoria.addItem(categorias.get(i).getNombre());
                 }
+                cest.getProductosRecogidos().clear();
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(null, "Error de SQL, contacte con el administrador", "Driver BBDD", JOptionPane.ERROR_MESSAGE);
                 System.exit(0);
@@ -278,7 +283,7 @@ public class JPVentana extends javax.swing.JPanel {
             } else {
                 id = gest.comprobacionID();
                 for (int i = 0; i < cest.getProductosRecogidos().size(); i++) {
-                    cest.llenarCesta(id, cest.getProductosRecogidos().get(i).getNombre());
+                    gest.llenarCesta(id, cest.getProductosRecogidos().get(i).getNombre());
                 }
                 for (int i = 0; i < jtProductos.getRowCount(); i++) {
                     dtm.removeRow(i);
@@ -306,8 +311,7 @@ public class JPVentana extends javax.swing.JPanel {
             int result = file.showSaveDialog(null);
             if (result == JFileChooser.APPROVE_OPTION) {
                 nombreArchivo = file.getSelectedFile();
-                cest.recuperarPedidos();
-                cest.insertatDatosPDF(nombreArchivo);
+                gestAr.insertatDatosPDF(nombreArchivo);
                 JOptionPane.showMessageDialog(null, "PDF creado correctamente");
                 cest.getProductosRecogidos().clear();
             } else if (result == JFileChooser.CANCEL_OPTION) {
@@ -332,8 +336,7 @@ public class JPVentana extends javax.swing.JPanel {
             int result = file.showSaveDialog(null);
             if (result == JFileChooser.APPROVE_OPTION) {
                 nombreArchivo = file.getSelectedFile();
-                cest.recuperarPedidos();
-                cest.introducirDatosHtml(nombreArchivo);
+                gestAr.introducirDatosHtml(nombreArchivo);
                 JOptionPane.showMessageDialog(null, "HTML creado correctamente");
                 cest.getProductosRecogidos().clear();
             } else if (result == JFileChooser.CANCEL_OPTION) {
